@@ -46,7 +46,7 @@ module tb_order_book;
             msg_valid = 1'b0;
             msg_in = '0;
 
-            repeat (2) @(negedge clk);
+            repeat (1) @(negedge clk);
         end
     endtask
 
@@ -84,7 +84,7 @@ module tb_order_book;
         rst_n = 1;
         enable = 1;
 
-        repeat (2) @(negedge clk);
+        repeat (1) @(negedge clk);
 
         $display("================================");
         $display("ORDER BOOK TESTBENCH");
