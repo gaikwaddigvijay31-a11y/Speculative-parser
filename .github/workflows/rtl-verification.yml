@@ -29,3 +29,27 @@ jobs:
       - name: Run simulation
         run: |
           vvp sim_speculative.out
+ order-book:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+
+      - name: Compile order book
+        run: |
+          iverilog -g2012 -Wall \
+            -s tb_order_book \
+            -o sim_order_book.out \
+            rtl/fixed_point_pkg.sv \
+            rtl/order_book.sv \
+            tb/tb_order_book.sv
+
+      - name: Run order book simulation
+        run: |
+          vvp sim_order_book.out
