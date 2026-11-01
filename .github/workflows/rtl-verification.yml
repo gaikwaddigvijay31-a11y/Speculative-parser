@@ -1,0 +1,31 @@
+name: RTL Verification
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  speculative-parser:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+
+      - name: Compile speculative parser
+        run: |
+          iverilog -g2012 -Wall \
+            -s tb_speculative_parser \
+            -o sim_speculative.out \
+            rtl/fixed_point_pkg.sv \
+            rtl/speculative_parser.sv \
+            tb/tb_speculative_parser.sv
+
+      - name: Run simulation
+        run: |
+          vvp sim_speculative.out
