@@ -1,3 +1,4 @@
+
 name: RTL Verification
 
 on:
@@ -29,6 +30,7 @@ jobs:
       - name: Run simulation
         run: |
           vvp sim_speculative.out
+
   order-book:
     runs-on: ubuntu-latest
 
@@ -53,3 +55,28 @@ jobs:
       - name: Run order book simulation
         run: |
           vvp sim_order_book.out
+
+  cuckoo-hash-table:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+
+      - name: Compile cuckoo hash table
+        run: |
+          iverilog -g2012 -Wall \
+            -s tb_cuckoo_hash_table \
+            -o sim_cuckoo.out \
+            rtl/fixed_point_pkg.sv \
+            rtl/cuckoo_hash_table.sv \
+            tb/tb_cuckoo_hash_table.sv
+
+      - name: Run cuckoo hash table simulation
+        run: |
+          vvp sim_cuckoo.out
